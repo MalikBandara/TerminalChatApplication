@@ -1,9 +1,9 @@
 package lk.ijse.New;
 
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Scanner;
@@ -11,33 +11,35 @@ import java.util.Scanner;
 public class NewServer {
 
     public static void main(String[] args) {
+
         Scanner sc = new Scanner(System.in);
-        ServerSocket serverSocket;
-
-        {
-            try {
-                serverSocket = new ServerSocket(9806);
-                System.out.println("Accepted client connection");
-
-                Socket accept = serverSocket.accept();
-
-                DataInputStream input = new DataInputStream(accept.getInputStream());
-                String message = input.readUTF();
-                System.out.println(message);
-
-                System.out.println("Server Message");
-                String s = sc.nextLine();
-
-                DataOutputStream outPut2 = new DataOutputStream(accept.getOutputStream());
-                outPut2.writeUTF(s);
-                outPut2.flush();
 
 
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+        try {
+            System.out.println("waiting for the Client ");
+            ServerSocket serverSocket = new ServerSocket(9806);
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected");
 
-            }
+            DataInputStream dataInputStream = new DataInputStream(socket.getInputStream());
+            String s = dataInputStream.readUTF();
+            System.out.println("Message from Client : " + s);
+
+
+            System.out.print("Message from Server : ");
+            String s1 = sc.nextLine();
+            DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+            dataOutputStream.writeUTF(s1);
+            dataOutputStream.flush();
+            System.out.println("Message send  from server Successfully");
+
+
+
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
+
+
     }
 
 
